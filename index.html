@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crossword Buddy</title>
+    <link rel="icon" href="assets/favicon.png" type="image/png">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="content-container">
+        <div class="header">
+            <img class="logo" src="assets/logo.png" alt="Logo">
+            <div class="tagline">
+                Crossword Buddy gives you alternative <b>hints</b> so you can solve the NYT Crossword without revealing letters (but you can do that too). <br /> 
+                Sometimes all you need is just a little hint :)
+            </div>
+        </div>
+        <hr style="width: 100%; border: 1px solid #000;">
+        <div class="game-container">
+            <div class="grid-container">
+                <div class="clue-banner"></div>
+                <div class="reveal-area">
+                    <div class="hint-banner"></div>
+                    <div class="reveal-button" id="btn-reveal-letter">Reveal letter</div>
+                    <div class="reveal-button" id="btn-reveal-answer">Reveal answer</div>
+                    <div class="reveal-button" id="btn-reveal-puzzle">Reveal puzzle</div>
+                </div>
+                <div class="crossword"></div>
+            </div>
+            <div class="clues-container">
+                <div class="across-clues">
+                    <h2>Across</h2>
+                    <!-- Across clues here -->
+                </div>
+                    <div class="down-clues">
+                    <h2>Down</h2>
+                    <!-- Down clues here -->
+                </div>
+            </div>
+        </div>
+        <hr style="width: 100%; border: 1px solid #000;">
+        <div style="margin: 10px; text-align: center;">
+            Created by Steven Morse | &#169; 2024
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

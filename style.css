@@ -1,0 +1,204 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+}
+
+.content-container {
+    margin: 0 auto;
+}
+
+.header {
+    width: 1100px;
+    text-align: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    width: 10%;
+    margin: 20px;
+}
+
+.tagline {
+    height: 50px;
+    width: 600px;
+    text-align: center;
+    margin: 10px;
+    font-size: large;
+    font-style: italic;
+}
+
+.game-container {
+    /* text-align: center; */
+    height: 735px;  /* 600 + (45*3) = 735 */
+    display: flex;
+    flex-direction: row;
+}
+
+.grid-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.clue-banner {
+    width: 600px; /* Match the width of the grid */
+    height: 45px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;  /* so padding/content doesn't adjust size */
+    padding: 5px 10px; 
+    margin: 5px 5px;
+    background-color: lightskyblue;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.hint-banner {
+    width: 600px; /* Match the width of the grid */
+    height: 60px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;  /* so padding/content doesn't adjust size */
+    padding: 5px 10px; 
+    margin: 0px 5px 5px 5px;  /* 0 top so doesn't double the other banner */
+    background-color: lightgoldenrodyellow;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.reveal-area {
+    width: 600px;
+    height: 100px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 5px;
+    margin: 0px 5px 5px 5px;
+    background-color: white;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 300;
+    border: 1px solid black;
+}
+
+.reveal-button {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    text-align: center;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: #e0e0e0;
+    }
+}
+
+.crossword {
+    display: grid;
+    grid-template-columns: repeat(15, 1fr); /* Use equal fractional units for cells */
+    grid-template-rows: repeat(15, 1fr);   /* Match rows to columns for a square grid */
+    width: 600px; /* Set a fixed width for the grid */
+    height: 600px; /* Set a fixed height for the grid */
+    gap: 0; /* Eliminate any gaps between cells */
+    border: 1px solid #ddd; /* Optional: Add a border around the grid */
+}
+  
+.cell {
+    border: 1px solid #ddd; /* Ensure each cell has a visible border */
+    box-sizing: border-box; /* Include border in cell dimensions */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: #fff;
+}
+  
+.cell.black {
+    background: #000;
+    border: none; /* Black cells blend seamlessly */
+}
+
+.cell-label {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    font-size: 10px;
+    color: #555;
+}
+
+.cell.highlight {
+    background: lightskyblue;
+}
+
+.cell.spotlight {
+    background: #ffeb3b;
+}
+
+/* .clues {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+}
+  
+.clues h2 {
+    font-size: 14px; /* Smaller headers for "Across" and "Down"
+} */
+  
+.across-clues,
+.down-clues {
+    font-size: 14px; 
+    line-height: 1.7; /* Adjust line spacing to prevent overlap */
+    margin-bottom: 20px; 
+    overflow-y: auto;
+    word-wrap: break-word;
+    flex: 1; /* Both sections take equal width */
+}
+
+.across-clues h2, .down-clues h2 {
+    position: -webkit-sticky; /* For Safari */
+    position: sticky;
+    top: 5px;
+    background-color: white;
+    border-bottom: 2px solid lightgray;
+    z-index: 1;
+}
+  
+.clue {
+    margin-bottom: 4px; /* Reduce spacing between individual clues */
+}
+
+.clue.highlight {
+    font-weight: bold;
+    color: #d32f2f;
+}
+
+.clues-container {
+    height: 100%;  /* match parent */
+    width: 400px;
+    margin-left: 10px;
+    display: flex;
+    flex: 1;
+    justify-content: space-between; /* Align Across and Down sections */
+    gap: 20px; /* Add spacing between the two sections */
+    overflow-y: auto;
+}
+  
+.across-clues,
+.down-clues {
+    flex: 1; 
+}
+  
+  
