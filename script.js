@@ -1,14 +1,16 @@
 $(document).ready(function () {
   
-  // grab today's date and format as yyyy-mm-dd
-  const today = new Date();
-  const formattedDate = today.toISOString().split('T')[0];
+  // get today's date in Eastern Standard Time and format as yyyy-mm-dd
+  const todayEST = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
+  const formattedDate = new Date(todayEST).toISOString().split('T')[0];
   console.log(formattedDate);
 
   $.getJSON(`assets/${formattedDate}.json`, function (data) {
     
     // HEADER
-    // console.log('inside');
+    const info = $('.puzzle-info');
+    info.text(`Crossword | ${formattedDate} | by ${data.constructors[0]}, 
+      edited by ${data.editor}`);
 
 
     // GRID AND CLUES
