@@ -1,8 +1,29 @@
 $(document).ready(function () {
   
   // get today's date in Eastern Standard Time and format as yyyy-mm-dd
-  const todayEST = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
-  const formattedDate = new Date(todayEST).toISOString().split('T')[0];
+  // const todayEST = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
+  // const formattedDate = new Date(todayEST).toISOString().split('T')[0];
+
+  // Get the current date in UTC
+  const now = new Date();
+
+  // Convert to EST (UTC-5)
+  const options = {
+    timeZone: "America/New_York", // Eastern Time
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  };
+
+  const formatter = new Intl.DateTimeFormat("en-US", options);
+  const parts = formatter.formatToParts(now);
+
+  // Extract and format as yyyy-mm-dd
+  const year = parts.find(part => part.type === "year").value;
+  const month = parts.find(part => part.type === "month").value;
+  const day = parts.find(part => part.type === "day").value;
+  const formattedDate = `${year}-${month}-${day}`;
+  
   console.log(formattedDate);
 
   $.getJSON(`assets/${formattedDate}.json`, function (data) {
