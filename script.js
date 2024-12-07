@@ -1,8 +1,4 @@
 $(document).ready(function () {
-  
-  // get today's date in Eastern Standard Time and format as yyyy-mm-dd
-  // const todayEST = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
-  // const formattedDate = new Date(todayEST).toISOString().split('T')[0];
 
   // Get the current date in UTC
   const now = new Date();
@@ -23,7 +19,7 @@ $(document).ready(function () {
   const month = parts.find(part => part.type === "month").value;
   const day = parts.find(part => part.type === "day").value;
   const formattedDate = `${year}-${month}-${day}`;
-  
+
   console.log(formattedDate);
 
   $.getJSON(`assets/${formattedDate}.json`, function (data) {
@@ -130,7 +126,8 @@ $(document).ready(function () {
         clueBanner.text(`${toggledClue.label}. ${toggledClue.text[0].plain}`);
 
         // update hint banner
-        const relevantHint = hints.find((hint) => hint.label === toggledClue.label);
+        const relevantHint = hints.find((hint) => 
+          hint.label === toggledClue.label && hint.direction === toggledClue.direction);
         if (relevantHint) {
           hintBanner.text(`${relevantHint.hint}`);
         } else {
