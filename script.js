@@ -31,9 +31,16 @@ $(document).ready(function () {
 
 
     // GRID AND CLUES
-
+    
     const hints = data.hints;
     data = data.body[0];
+
+    // Adjust crossword grid size
+    const gridSize = data.dimensions;
+    $('.crossword').css({
+      'grid-template-columns': `repeat(${gridSize.width}, 1fr)`,
+      'grid-template-rows': `repeat(${gridSize.height}, 1fr)`
+    });
       
     const grid = $('.crossword');
     const acrossClues = $('.across-clues');
