@@ -26,7 +26,7 @@ $(document).ready(function () {
     
     // HEADER
     const info = $('.puzzle-info');
-    info.text(`Crossword | ${formattedDate} | by ${data.constructors[0]}, 
+    info.append(` | ${formattedDate} | by ${data.constructors[0]}, 
       edited by ${data.editor}`);
 
 
@@ -110,6 +110,51 @@ $(document).ready(function () {
         hintBanner.text(`${relevantHint.hint}`);
       } else {
         hintBanner.text(`No hint available.`);
+      }
+    });
+
+    // tab key moves to next clue in same direction as current
+    $(document).on('keydown', function (e) {
+      if (e.key === 'Tab') {
+      e.preventDefault();
+      const spotlightCell = $('.cell.spotlight');
+      if (spotlightCell.length) {
+        const index = spotlightCell.data('index');
+        const currentClue = clues.find((clue) => clue.cells.includes(index));
+        
+        if (currentClue) {
+        const currentDirection = currentClue.direction;
+        const currentLabel = currentClue.label;
+        const nextClue = clues.find((clue) => 
+          clue.direction === currentDirection && clue.label > currentLabel
+        );
+
+        if (nextClue) {
+          // Update clue banner
+          clueBanner.text(`${nextClue.label}. ${nextClue.text[0].plain}`);
+
+          // Update hint banner
+          const relevantHint = hints.find((hint) => 
+          hint.label === nextClue.label && hint.direction === nextClue.direction);
+          if (relevantHint) {
+          hintBanner.text(`${relevantHint.hint}`);
+          } else {
+          hintBanner.text(`No hint available.`);
+          }
+
+          // Highlight next clue and its associated cells
+          $('.cell').removeClass('highlight');
+          $('.clue').removeClass('highlight');
+          $('.cell').removeClass('spotlight');
+
+          nextClue.cells.forEach((cellIndex) => {
+          $(`.cell[data-index=${cellIndex}]`).addClass('highlight');
+          });
+          $(`.clue[data-cells='${nextClue.cells.join(',')}']`).addClass('highlight');
+          $(`.cell[data-index=${nextClue.cells[0]}]`).addClass('spotlight');
+        }
+        }
+      }
       }
     });
   
@@ -205,6 +250,19 @@ $(document).ready(function () {
             $(this).addClass('revealed-answer');
           }
         }
+      });
+    });
+
+    $('#btn-reveal-puzzle').click(function () {
+      $('.cell').each(function () {
+      const index = $(this).data('index');
+      const cellData = cells[index];
+      if (cellData && cellData.answer) {
+        if (!$(this).hasClass('revealed-answer')) {
+        $(this).append($('<span>').text(cellData.answer));
+        $(this).addClass('revealed-answer');
+        }
+      }
       });
     });
   });

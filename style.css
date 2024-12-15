@@ -1,9 +1,69 @@
 body {
     font-family: "Roboto", Arial, sans-serif;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     padding: 20px;
 }
+
+a {
+    text-decoration: none;
+    color: #6059c1;  /*blue*/
+}
+    
+a:hover {
+    text-decoration: underline;
+    transition: .5s;
+}
+
+.header-banner {
+    width: 100%;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    box-sizing: border-box;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    font-family: "Montserrat";
+    font-weight: 600;
+}
+
+.header-logo {
+    width: 50px;
+    height: auto;
+    margin: 5px;
+}
+
+.header-links {
+    display: flex;
+    align-items: center;
+}
+
+.header-links a {
+    margin-left: 15px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+}
+
+.header-links a:hover {
+    color: #0073e6;
+}
+
+.header-links .social-icon {
+    margin-left: 10px;
+}
+
+.header-links .social-icon img {
+    width: 20px;
+    height: auto;
+}
+
 
 .content-container {
     margin: 0 auto;
@@ -29,7 +89,7 @@ body {
     align-items: center;
     height: 100px;
     width: 600px;
-    text-align: left;
+    text-align: center;
     margin: 10px;
     font-size: large;
     /* font-style: italic; */

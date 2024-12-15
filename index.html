@@ -6,13 +6,18 @@
     <title>Crossword Buddy</title>
     <link rel="icon" href="assets/favicon.png" type="image/png">
     
+    <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
+    <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto+Mono&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto+Mono&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     
+    <!-- icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-WYQ3TKPDR5"></script>
     <script>
@@ -26,19 +31,48 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    
     <div class="content-container">
+
+        <div class="header-banner">
+            <div class="logo-area">
+                <img src="assets/logo_small.png" alt="Logo" class="header-logo">
+                crossword buddy
+            </div>
+            <div class="header-links">
+                <a href="#about" class="about-link">About</a>
+                <a href="https://twitter.com/" target="_blank" class="social-icon">
+                    <!-- <img src="assets/twitter-icon.png" alt="Twitter"> -->
+                    <i class="fa-brands fa-twitter" aria-hidden="true" target="_blank"></i>
+                </a>
+                <a href="https://github.com/stmorse/xwbuddy" target="_blank" class="social-icon">
+                    <!-- <img src="assets/github-icon.png" alt="GitHub"> -->
+                    <i class="fa-brands fa-github" aria-hidden="true" target="_blank"></i>
+                </a>
+            </div>
+        </div>
+        
         <div class="header">
-            <img class="logo" src="assets/logo.png" alt="Logo">
             <div class="tagline">
                 Stuck on the crossword but don't want to look up answers?  <br /><br />
                 Crossword Buddy gives you <b>alternative clues</b> so you can solve without revealing letters (but you can do that too).
             </div>
         </div>
-        <div class="puzzle-info"></div>
+        
+        <div class="puzzle-info">
+            <a href="https://www.nytimes.com/crosswords">
+                NYT Crossword
+                <i class="fa fa-external-link" aria-hidden="true"></i>
+            </a>
+        </div>
+        
         <hr style="width: 100%; border: 1px solid #000;">
+        
         <div class="game-container">
             <div class="grid-container">
+                
                 <div class="clue-banner"></div>
+                
                 <div class="reveal-area">
                     <!-- <div class="hint-label">Crossword Buddy clue:</div> -->
                     <div class="hint-banner"></div>
@@ -46,7 +80,9 @@
                     <div class="reveal-button" id="btn-reveal-answer">Reveal answer</div>
                     <div class="reveal-button" id="btn-reveal-puzzle">Reveal puzzle</div>
                 </div>
+                
                 <div class="crossword"></div>
+            
             </div>
             <div class="clues-container">
                 <div class="across-clues">
@@ -59,9 +95,12 @@
                 </div>
             </div>
         </div>
+        
         <hr style="width: 100%; border: 1px solid #000;">
+        
         <div style="margin: 10px; text-align: center;">
-            Created by <a href="https://stmorse.github.io/">Steven Morse</a> | &#169; 2024
+            Created by <a href="https://stmorse.github.io/">Steven Morse</a> | &#169; 2024 |
+            Clues are AI-generated
         </div>
     </div>
     
