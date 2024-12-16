@@ -87,14 +87,17 @@ $(document).ready(function () {
       const relevantClue = clues.find((clue) => clue.cells.includes(index));
       const relevantHint = hints.find((hint) => hint.label === relevantClue.label);
 
+      // remove highlighting on all cells and clues
       $('.cell').removeClass('highlight');
       $('.clue').removeClass('highlight');
       $('.cell').removeClass('spotlight');
 
+      // if we found a clue here, update everything
       if (relevantClue) {
         // Update clue banner
         clueBanner.text(`${relevantClue.label}. ${relevantClue.text[0].plain}`);
 
+        // update highlighting in cell and clue list
         relevantClue.cells.forEach((cellIndex) => {
             $(`.cell[data-index=${cellIndex}]`).addClass('highlight');
         });
@@ -105,6 +108,7 @@ $(document).ready(function () {
         $(this).addClass('spotlight');
       }
 
+      // if we have hint, display it
       if (relevantHint) {
         // update hint banner
         hintBanner.text(`${relevantHint.hint}`);
@@ -116,45 +120,41 @@ $(document).ready(function () {
     // tab key moves to next clue in same direction as current
     $(document).on('keydown', function (e) {
       if (e.key === 'Tab') {
-      e.preventDefault();
-      const spotlightCell = $('.cell.spotlight');
-      if (spotlightCell.length) {
-        const index = spotlightCell.data('index');
-        const currentClue = clues.find((clue) => clue.cells.includes(index));
-        
-        if (currentClue) {
-        const currentDirection = currentClue.direction;
-        const currentLabel = currentClue.label;
-        const nextClue = clues.find((clue) => 
-          clue.direction === currentDirection && clue.label > currentLabel
-        );
-
-        if (nextClue) {
-          // Update clue banner
-          clueBanner.text(`${nextClue.label}. ${nextClue.text[0].plain}`);
-
-          // Update hint banner
-          const relevantHint = hints.find((hint) => 
-          hint.label === nextClue.label && hint.direction === nextClue.direction);
-          if (relevantHint) {
-          hintBanner.text(`${relevantHint.hint}`);
-          } else {
-          hintBanner.text(`No hint available.`);
+        e.preventDefault();
+        const spotlightCell = $('.cell.spotlight');
+        if (spotlightCell.length) {
+          const index = spotlightCell.data('index');
+          const currentClueIndex = data.clues.findIndex((clue) => 
+            clue.cells.includes(index));
+          
+          if (currentClueIndex !== -1) {
+            const nextClueIndex = (currentClueIndex + 1) % data.clues.length;
+            const nextClue = data.clues[nextClueIndex];
+    
+            // Update clue banner
+            clueBanner.text(`${nextClue.label}. ${nextClue.text[0].plain}`);
+    
+            // Update hint banner
+            const relevantHint = hints.find((hint) => 
+              hint.label === nextClue.label && hint.direction === nextClue.direction);
+            if (relevantHint) {
+              hintBanner.text(`${relevantHint.hint}`);
+            } else {
+              hintBanner.text(`No hint available.`);
+            }
+    
+            // Highlight next clue and its associated cells
+            $('.cell').removeClass('highlight');
+            $('.clue').removeClass('highlight');
+            $('.cell').removeClass('spotlight');
+    
+            nextClue.cells.forEach((cellIndex) => {
+              $(`.cell[data-index=${cellIndex}]`).addClass('highlight');
+            });
+            $(`.clue[data-cells='${nextClue.cells.join(',')}']`).addClass('highlight');
+            $(`.cell[data-index=${nextClue.cells[0]}]`).addClass('spotlight');
           }
-
-          // Highlight next clue and its associated cells
-          $('.cell').removeClass('highlight');
-          $('.clue').removeClass('highlight');
-          $('.cell').removeClass('spotlight');
-
-          nextClue.cells.forEach((cellIndex) => {
-          $(`.cell[data-index=${cellIndex}]`).addClass('highlight');
-          });
-          $(`.clue[data-cells='${nextClue.cells.join(',')}']`).addClass('highlight');
-          $(`.cell[data-index=${nextClue.cells[0]}]`).addClass('spotlight');
         }
-        }
-      }
       }
     });
   
