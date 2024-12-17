@@ -69,20 +69,29 @@ a:hover {
     margin: 0 auto;
 }
 
+@media (max-width: 600px) {
+    .content-container {
+        width: 100%;
+        padding: 0 10px;
+        box-sizing: border-box;
+    }
+}
+
 .header {
     font-family: "Montserrat";
-    width: 1100px;
+    /* width: 1100px; */
+    width: 100%;
     /* text-align: left; */
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+/* 
 .logo {
     width: 15%;
     margin: 5px 20px 5px 5px;
-}
-
+} */
 
 .tagline {
     /* display: flex; */
@@ -96,11 +105,23 @@ a:hover {
 }
 
 .puzzle-info {
-    width: 1100px;
+    /* width: 1100px; */
+    width: 100%;
     text-align: center;
     margin: 2px;
     font-size: medium;
     font-style: italic;
+}
+
+
+@media (max-width: 600px) {
+    .tagline {
+        font-size: small;
+    }
+
+    .puzzle-info {
+        font-size: small;
+    }
 }
 
 .game-container {
@@ -117,6 +138,13 @@ a:hover {
     margin-bottom: 20px;
 }
 
+@media (max-width: 600px) {
+    .game-container {
+        flex-direction: column;
+        height: auto;
+    }
+}
+
 .clue-banner {
     width: 600px; /* Match the width of the grid */
     height: 45px;
@@ -129,6 +157,12 @@ a:hover {
     text-align: center;
     font-size: 16px;
     font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    .clue-banner {
+        width: 100%;
+    }
 }
 
 .hint-banner:before {
@@ -153,6 +187,12 @@ a:hover {
     text-align: center;
     font-size: 16px;
     font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    .hint-banner {
+        width: 100%;
+    }
 }
 
 .reveal-area {
@@ -188,6 +228,35 @@ a:hover {
     }
 }
 
+.reveal-button-area {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+@media (max-width: 600px) {
+    .reveal-area {
+        width: 100%;
+        flex-direction: column;
+        height: auto;
+    }
+
+    .reveal-button-area {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .reveal-button {
+        flex: 1;
+        /* width: 10%; */
+        font-size: small;
+        margin: 5px;
+        padding: 10px;
+        /* display: inline-block; */
+    }
+}
+
 .crossword {
     display: grid;
     grid-template-columns: repeat(15, 1fr); /* Use equal fractional units for cells */
@@ -196,6 +265,16 @@ a:hover {
     height: 600px; /* Set a fixed height for the grid */
     gap: 0; /* Eliminate any gaps between cells */
     border: 1px solid #ddd; /* Optional: Add a border around the grid */
+}
+
+@media (max-width: 600px) {
+    .crossword {
+        /* width: 100%; */
+        /* height: 100%; */
+        /* height: auto; */
+        width: 100%;
+        height: 100vw;
+    }
 }
   
 .cell {
@@ -286,6 +365,55 @@ a:hover {
 .across-clues,
 .down-clues {
     flex: 1; 
+}
+
+@media (max-width: 600px) {
+    .clues-container {
+        display: none;
+    }
+}
+
+
+.popup {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.popup-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 10px;
+}
+
+.popup-logo {
+    width: 50%;
+    height: auto;
+    margin: 5px;
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
 }
   
   

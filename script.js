@@ -266,4 +266,19 @@ $(document).ready(function () {
       });
     });
   });
+
+  $('.about-link').click(function(event) {
+      event.preventDefault();
+      $('#about-popup').fadeIn();
+  });
+
+  $('.close-btn').click(function() {
+      $('#about-popup').fadeOut();
+  });
+
+  $(window).click(function(event) {
+      if ($(event.target).is('#about-popup')) {
+          $('#about-popup').fadeOut();
+      }
+  });
 });

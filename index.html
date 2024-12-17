@@ -76,9 +76,11 @@
                 <div class="reveal-area">
                     <!-- <div class="hint-label">Crossword Buddy clue:</div> -->
                     <div class="hint-banner"></div>
-                    <div class="reveal-button" id="btn-reveal-letter">Reveal letter</div>
-                    <div class="reveal-button" id="btn-reveal-answer">Reveal answer</div>
-                    <div class="reveal-button" id="btn-reveal-puzzle">Reveal puzzle</div>
+                    <div class="reveal-button-area">
+                        <div class="reveal-button" id="btn-reveal-letter">Reveal letter</div>
+                        <div class="reveal-button" id="btn-reveal-answer">Reveal answer</div>
+                        <div class="reveal-button" id="btn-reveal-puzzle">Reveal puzzle</div>
+                    </div>
                 </div>
                 
                 <div class="crossword"></div>
@@ -101,6 +103,16 @@
         <div style="margin: 10px; text-align: center;">
             Created by <a href="https://stmorse.github.io/">Steven Morse</a> | &#169; 2024 |
             Clues are AI-generated
+        </div>
+
+        <div id="about-popup" class="popup">
+            <div class="popup-content">
+                <span class="close-btn">&times;</span>
+                <img src="assets/logo.png" alt="Logo" class="popup-logo">
+                <p>Crossword Buddy is a tool designed to help you solve crosswords without directly giving away the answers. It provides alternative clues to help you think differently about the puzzle.</p>
+                <p>Alternative clues are AI-generated (currently using Llama 3.1 (70B)) using custom prompts and some coaxing.</p>
+                <p>This project is <a href="https://github.com/stmorse/xwbuddy">open-source</a> -- come be a contributor!</p>
+            </div>
         </div>
     </div>
     
