@@ -14,19 +14,28 @@ $(document).ready(function () {
   const formatter = new Intl.DateTimeFormat("en-US", options);
   const parts = formatter.formatToParts(now);
 
-  // Extract and format as yyyy-mm-dd
+  // Extract and format as yyyy-mm-dd for the filename
   const year = parts.find(part => part.type === "year").value;
   const month = parts.find(part => part.type === "month").value;
   const day = parts.find(part => part.type === "day").value;
   const formattedDate = `${year}-${month}-${day}`;
 
-  console.log(formattedDate);
+  // Get the long date for display
+  const longDateOptions = {
+    timeZone: "America/New_York",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  const longDateFormatter = new Intl.DateTimeFormat("en-US", longDateOptions);
+  const longFormattedDate = longDateFormatter.format(now);
 
   $.getJSON(`assets/${formattedDate}.json`, function (data) {
     
     // HEADER
     const info = $('.puzzle-info');
-    info.append(` | ${formattedDate} | by ${data.constructors[0]}, 
+    info.append(` &nbsp; &#183; &nbsp; ${longFormattedDate} 
+      &nbsp; &#183; &nbsp; by ${data.constructors[0]}, 
       edited by ${data.editor}`);
 
 

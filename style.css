@@ -399,7 +399,8 @@ a:hover {
 .popup-logo {
     width: 50%;
     height: auto;
-    margin: 5px;
+    margin: 5px auto;
+    display: block;
 }
 
 .close-btn {
