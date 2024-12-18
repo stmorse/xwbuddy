@@ -80,45 +80,75 @@ $(document).ready(function () {
         downClues.append(clueDiv);
       }
     });
-  
-    // Highlight clue and cells on click
-    $('.cell').click(function () {
-      const index = $(this).data('index');
-      const relevantClue = clues.find((clue) => clue.cells.includes(index));
-      const relevantHint = hints.find((hint) => hint.label === relevantClue.label);
 
-      // remove highlighting on all cells and clues
+    // function to update the clue banner and highlight cells
+    function updateActive(cell, toggle) {
+      // get currently highlighted clue so we can figure out direction
+      const currentClue = $('.clue.highlight');
+      let direction = 'Across';
+      if (currentClue.length) {
+        direction = currentClue.data('direction');
+      }
+
+      // get index of clicked cell
+      const index = $(cell).data('index');
+
+      // get new direction
+      if (toggle) {
+        direction = direction === 'Across' ? 'Down' : 'Across';
+      }
+
+      // get clue associated with this cell in the new direction
+      const newClue = clues.find((clue) => 
+        clue.cells.includes(index) && clue.direction === direction);
+
+      // get hint associated with this new clue
+      const newHint = hints.find((hint) => 
+        hint.label === newClue.label && hint.direction === newClue.direction);
+      
+      // update banner
+      clueBanner.text(`${newClue.label}. ${newClue.text[0].plain}`);
+
+      // remove highlighting off everything
       $('.cell').removeClass('highlight');
       $('.clue').removeClass('highlight');
       $('.cell').removeClass('spotlight');
 
-      // if we found a clue here, update everything
-      if (relevantClue) {
-        // Update clue banner
-        clueBanner.text(`${relevantClue.label}. ${relevantClue.text[0].plain}`);
+      // re-highlight the cells of this clue
+      newClue.cells.forEach((cellIndex) => {
+        $(`.cell[data-index=${cellIndex}]`).addClass('highlight');
+      });
 
-        // update highlighting in cell and clue list
-        relevantClue.cells.forEach((cellIndex) => {
-            $(`.cell[data-index=${cellIndex}]`).addClass('highlight');
-        });
-        $(`.clue[data-cells='${relevantClue.cells.join(',')}']`).addClass('highlight');
-
-        // make clicked cell a different color
-        $(this).removeClass('highlight');
-        $(this).addClass('spotlight');
-      }
-
+      // highlight the clue text
+      $(`.clue[data-cells='${newClue.cells.join(',')}']`).addClass('highlight');
+      
+      // make clicked cell a different color
+      $(cell).removeClass('highlight');
+      $(cell).addClass('spotlight');
+      
       // if we have hint, display it
-      if (relevantHint) {
+      if (newHint) {
         // update hint banner
-        hintBanner.text(`${relevantHint.hint}`);
+        hintBanner.text(`${newHint.hint}`);
       } else {
         hintBanner.text(`No hint available.`);
       }
+    }
+  
+    // Highlight clue and cells on click
+    $('.cell').click(function () {
+      // update the banner and highlighting
+      updateActive(this, false);
     });
 
-    // tab key moves to next clue in same direction as current
+    // double-click to toggle between Across and Down clues
+    $('.cell').on('dblclick', function () {
+      // update the banner and highlighting
+      updateActive(this, true);
+    });
+    
     $(document).on('keydown', function (e) {
+      // tab key moves to next clue in same direction as current
       if (e.key === 'Tab') {
         e.preventDefault();
         const spotlightCell = $('.cell.spotlight');
@@ -158,50 +188,13 @@ $(document).ready(function () {
       }
     });
   
-    // Double-click to toggle between Across and Down clues
-    $('.cell').on('dblclick', function () {
-      const index = $(this).data('index');
-      const currentClue = clues.find((clue) => clue.cells.includes(index));
-      
-      if (!currentClue) return; // Skip if no clue associated
-
-      const currentDirection = currentClue.direction;
-      const toggleDirection = currentDirection === 'Across' ? 'Down' : 'Across';
-
-      // Find the clue in the toggled direction
-      const toggledClue = clues.find(
-        (clue) => clue.cells.includes(index) && clue.direction === toggleDirection
-      );
-
-      if (toggledClue) {
-        // Update clue banner
-        clueBanner.text(`${toggledClue.label}. ${toggledClue.text[0].plain}`);
-
-        // update hint banner
-        const relevantHint = hints.find((hint) => 
-          hint.label === toggledClue.label && hint.direction === toggledClue.direction);
-        if (relevantHint) {
-          hintBanner.text(`${relevantHint.hint}`);
-        } else {
-          hintBanner.text(`No hint available.`);
-        }
-
-        // Highlight toggled clue and its associated cells
-        $('.cell').removeClass('highlight');
-        $('.clue').removeClass('highlight');
-
-        toggledClue.cells.forEach((cellIndex) => {
-          $(`.cell[data-index=${cellIndex}]`).addClass('highlight');
-        });
-        $(`.clue[data-cells='${toggledClue.cells.join(',')}']`).addClass('highlight');
-      }
-    });
-  
+    // clicking on clues highlights associated cells
     $('.clue').click(function () {
       const cellsToHighlight = $(this).data('cells').split(',').map(Number);
 
       $('.cell').removeClass('highlight');
       $('.clue').removeClass('highlight');
+      $('.cell').removeClass('spotlight');
 
       cellsToHighlight.forEach((cellIndex) => {
         $(`.cell[data-index=${cellIndex}]`).addClass('highlight');
