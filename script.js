@@ -1,31 +1,7 @@
 $(document).ready(function () {
 
-  // $.ajax({
-  //     url: 'assets/',
-  //     success: function(data) {
-  //         $(data).find("a:contains('.json')").each(function() {
-  //             var filename = $(this).attr("href");
-  //             // $('#archive-popup').append($('<p>', {
-  //             //   class: 'archive-date',  
-  //             //   text: filename
-  //             // }));
-  //         });
-  //     }
-  // });
-
-  // const urlParams = new URLSearchParams(window.location.search);
-  // const fileParam = urlParams.get('file');
-  const fileParam = "";
-
-  let jsonFile = "";
-  let longFormattedDate = "";
-  if (fileParam) {
-    jsonFile = fileParam;
-    longFormattedDate = fileParam; // TODO: fix
-  } else {  
-    // Get the current date in UTC
-    const now = new Date();
-
+  // input Date() object and return [year, month, day]
+  function getDateParts(date) {
     // Convert to EST (UTC-5)
     const options = {
       timeZone: "America/New_York", // Eastern Time
@@ -35,15 +11,25 @@ $(document).ready(function () {
     };
 
     const formatter = new Intl.DateTimeFormat("en-US", options);
-    const parts = formatter.formatToParts(now);
+    const parts = formatter.formatToParts(date);
 
     // Extract and format as yyyy-mm-dd for the filename
     const year = parts.find(part => part.type === "year").value;
     const month = parts.find(part => part.type === "month").value;
     const day = parts.find(part => part.type === "day").value;
-    const formattedDate = `${year}-${month}-${day}`;
-    jsonFile = `${formattedDate}.json`;
 
+    return [year, month, day];
+  }
+
+  // input Date() object and return "yyyy-mm-dd" (EST)
+  function getFormattedDate(date) {
+    const parts = getDateParts(date);
+    const formattedDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
+    return formattedDate;
+  }
+
+  // input Date() object and return "Month D, YYYY" (EST)
+  function getLongFormattedDate(date) {
     // Get the long date for display
     const longDateOptions = {
       timeZone: "America/New_York",
@@ -52,10 +38,103 @@ $(document).ready(function () {
       day: "numeric",
     };
     const longDateFormatter = new Intl.DateTimeFormat("en-US", longDateOptions);
-    longFormattedDate = longDateFormatter.format(now);
+    const longFormattedDate = longDateFormatter.format(date);
+    return longFormattedDate;
   }
 
+  // generate calendar for archive pop-up
+  function generateCalendar(month, year) {
+    const today = parseInt(getDateParts(new Date())[2]); // get today as an int
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const calendar = $('<table>').addClass('calendar-table');
+    const headerRow = $('<tr>');
+    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    daysOfWeek.forEach(day => {
+      headerRow.append($('<th>').text(day));
+    });
+    calendar.append(headerRow);
+
+    let date = 1;
+    for (let i = 0; i < 6; i++) {
+      if (date >= daysInMonth) {
+        break;
+      }
+      const row = $('<tr>');
+      for (let j = 0; j < 7; j++) {
+        const cell = $('<td>');
+
+        if (i === 0 && j < firstDay) {
+          cell.addClass('empty');
+        } else if (date > daysInMonth) {
+          cell.addClass('empty');
+        } else {
+          const cellDate = $('<div>').addClass('calendar-date').text(date);
+          const cellPuzzle = $('<div>').addClass('calendar-puzzle');
+          cell.append(cellDate);
+          cell.append(cellPuzzle);
+
+          // if we're not in the future, it's possible we have a buddy
+          if (date <= today) {
+            const currentDay = new Date(year, month, date);
+            const currentDayFormatted = getFormattedDate(currentDay);
+            const jsonFile = `${currentDayFormatted}.json`;
+  
+            // if there's a puzzle stored for this date, link to it
+            $.ajax({
+              url: `assets/${jsonFile}`,
+              type: 'HEAD',  // checks if file exists without loading it
+              success: function() {
+                const link = $('<a>').attr(
+                  'href', `${window.location.href.split('?')[0]}?file=${jsonFile}`
+                );
+                const img = $('<img>').attr(
+                  'src', 'assets/favicon.png'
+                ).addClass('calendar-puzzle-image');
+                link.append(img);
+                cellPuzzle.append(link);
+              },
+              error: function(jqXHR, textStatus, error) {
+                cellPuzzle.addClass('empty');
+              }
+            });
+          }
+
+          date++;
+        }
+        row.append(cell);
+      }
+      calendar.append(row);
+    }
+    return calendar;
+  }
+
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+
+  $('.calendar-container').append(generateCalendar(currentMonth, currentYear));
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const fileParam = urlParams.get('file');
+  console.log('From ?file: ', fileParam);
+
+  let jsonFile = "";
+  let longFormattedDate = "";
+  if (fileParam) {
+    jsonFile = fileParam;
+  } else {
+    const formattedDate = getFormattedDate(now);
+    longFormattedDate = getLongFormattedDate(now);
+    jsonFile = `${formattedDate}.json`;
+  }
+
+  console.log('Before load: ', jsonFile);
+
   $.getJSON(`assets/${jsonFile}`, function (data) {
+
+    console.log('in getJSON with ', jsonFile);
     
     // HEADER
     const info = $('.puzzle-info');
