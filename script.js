@@ -1,43 +1,67 @@
 $(document).ready(function () {
 
-  // Get the current date in UTC
-  const now = new Date();
+  // $.ajax({
+  //     url: 'assets/',
+  //     success: function(data) {
+  //         $(data).find("a:contains('.json')").each(function() {
+  //             var filename = $(this).attr("href");
+  //             // $('#archive-popup').append($('<p>', {
+  //             //   class: 'archive-date',  
+  //             //   text: filename
+  //             // }));
+  //         });
+  //     }
+  // });
 
-  // Convert to EST (UTC-5)
-  const options = {
-    timeZone: "America/New_York", // Eastern Time
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  };
+  // const urlParams = new URLSearchParams(window.location.search);
+  // const fileParam = urlParams.get('file');
+  const fileParam = "";
 
-  const formatter = new Intl.DateTimeFormat("en-US", options);
-  const parts = formatter.formatToParts(now);
+  let jsonFile = "";
+  let longFormattedDate = "";
+  if (fileParam) {
+    jsonFile = fileParam;
+    longFormattedDate = fileParam; // TODO: fix
+  } else {  
+    // Get the current date in UTC
+    const now = new Date();
 
-  // Extract and format as yyyy-mm-dd for the filename
-  const year = parts.find(part => part.type === "year").value;
-  const month = parts.find(part => part.type === "month").value;
-  const day = parts.find(part => part.type === "day").value;
-  const formattedDate = `${year}-${month}-${day}`;
+    // Convert to EST (UTC-5)
+    const options = {
+      timeZone: "America/New_York", // Eastern Time
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    };
 
-  // Get the long date for display
-  const longDateOptions = {
-    timeZone: "America/New_York",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
-  const longDateFormatter = new Intl.DateTimeFormat("en-US", longDateOptions);
-  const longFormattedDate = longDateFormatter.format(now);
+    const formatter = new Intl.DateTimeFormat("en-US", options);
+    const parts = formatter.formatToParts(now);
 
-  $.getJSON(`assets/${formattedDate}.json`, function (data) {
+    // Extract and format as yyyy-mm-dd for the filename
+    const year = parts.find(part => part.type === "year").value;
+    const month = parts.find(part => part.type === "month").value;
+    const day = parts.find(part => part.type === "day").value;
+    const formattedDate = `${year}-${month}-${day}`;
+    jsonFile = `${formattedDate}.json`;
+
+    // Get the long date for display
+    const longDateOptions = {
+      timeZone: "America/New_York",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    const longDateFormatter = new Intl.DateTimeFormat("en-US", longDateOptions);
+    longFormattedDate = longDateFormatter.format(now);
+  }
+
+  $.getJSON(`assets/${jsonFile}`, function (data) {
     
     // HEADER
     const info = $('.puzzle-info');
     info.append(` &nbsp; &#183; &nbsp; ${longFormattedDate} 
       &nbsp; &#183; &nbsp; by ${data.constructors[0]}, 
       edited by ${data.editor}`);
-
 
     // GRID AND CLUES
     
@@ -269,13 +293,23 @@ $(document).ready(function () {
     });
   });
 
+
   $('.about-link').click(function(event) {
       event.preventDefault();
       $('#about-popup').fadeIn();
   });
 
-  $('.close-btn').click(function() {
-      $('#about-popup').fadeOut();
+  $('.archive-link').click(function(event) {
+    event.preventDefault();
+    $('#archive-popup').fadeIn();
+});
+
+  $('.about-close-btn').click(function() {
+    $('#about-popup').fadeOut();
+  });
+
+  $('.archive-close-btn').click(function() {
+    $('#archive-popup').fadeOut();
   });
 
   $(window).click(function(event) {

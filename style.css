@@ -403,7 +403,8 @@ a:hover {
     display: block;
 }
 
-.close-btn {
+.archive-close-btn,
+.about-close-btn {
     color: #aaa;
     float: right;
     font-size: 28px;
@@ -415,6 +416,13 @@ a:hover {
     color: #000;
     text-decoration: none;
     cursor: pointer;
+}
+
+.archive-date {
+    /* width: 100px; */
+    /* height: 10px; */
+    border: 1pt solid black;
+    margin: 3px;
 }
   
   
