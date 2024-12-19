@@ -118,24 +118,27 @@ $(document).ready(function () {
 
   const urlParams = new URLSearchParams(window.location.search);
   const fileParam = urlParams.get('file');
-  console.log('From ?file: ', fileParam);
 
   let jsonFile = "";
   let longFormattedDate = "";
   if (fileParam) {
     jsonFile = fileParam;
+
+    // convert filename back to (integer) year, mo, day
+    const parts = fileParam.split('.')[0].split('-').map(str => parseInt(str));
+
+    // convert to Date object (month is zero-based)
+    const date = new Date(parts[0], parts[1] - 1, parts[2]);
+    longFormattedDate = getLongFormattedDate(date);
+
   } else {
     const formattedDate = getFormattedDate(now);
     longFormattedDate = getLongFormattedDate(now);
     jsonFile = `${formattedDate}.json`;
   }
 
-  console.log('Before load: ', jsonFile);
-
   $.getJSON(`assets/${jsonFile}`, function (data) {
 
-    console.log('in getJSON with ', jsonFile);
-    
     // HEADER
     const info = $('.puzzle-info');
     info.append(` &nbsp; &#183; &nbsp; ${longFormattedDate} 
