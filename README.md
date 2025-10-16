@@ -10,4 +10,4 @@ In order to have bespoke generated hints for 80+ clues every day, the "Buddy" is
 
 This is currently an open-source project, and always open to feedback and/or collaboration opportunities.
 
-Happy puzzling! :)
+Happy puzzling! :) :)
