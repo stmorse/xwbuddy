@@ -469,6 +469,44 @@ a:hover {
     width: 40px;
     height: 40px;
     margin: 5px;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    transition: border-color 0.2s;
+}
+
+.calendar-puzzle-image:hover {
+    border-color: #6059c1;
+}
+
+.calendar-nav {
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.calendar-nav:hover {
+    background-color: transparent;
+}
+
+.calendar-month-label {
+    margin: 0 20px;
+}
+
+.calendar-nav-btn {
+    cursor: pointer;
+    padding: 5px 10px;
+    color: #6059c1;
+    user-select: none;
+}
+
+.calendar-nav-btn:hover:not(.disabled) {
+    text-decoration: underline;
+}
+
+.calendar-nav-btn.disabled {
+    color: #ccc;
+    cursor: default;
 }
 
 @media (max-width: 600px) {
@@ -477,5 +515,5 @@ a:hover {
         height: 20px;
         margin: 2px;
     }
-} 
+}
   

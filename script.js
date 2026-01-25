@@ -43,11 +43,38 @@ $(document).ready(function () {
   }
 
   // generate calendar for archive pop-up
-  function generateCalendar(month, year) {
-    const today = parseInt(getDateParts(new Date())[2]); // get today as an int
+  function generateCalendar(month, year, canGoBack) {
+    const nowParts = getDateParts(new Date());
+    const currentMonth = parseInt(nowParts[1]) - 1; // zero-based
+    const currentYear = parseInt(nowParts[0]);
+    const today = parseInt(nowParts[2]);
+    const isCurrentMonth = (month === currentMonth && year === currentYear);
+
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
+
     const calendar = $('<table>').addClass('calendar-table');
+
+    // Month/year header with navigation
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+    const navRow = $('<tr>');
+    const navCell = $('<td>').attr('colspan', 7).addClass('calendar-nav');
+
+    const prevBtn = $('<span>').addClass('calendar-nav-btn calendar-prev').html('&larr;');
+    if (!canGoBack) {
+      prevBtn.addClass('disabled');
+    }
+    const nextBtn = $('<span>').addClass('calendar-nav-btn calendar-next').html('&rarr;');
+    if (isCurrentMonth) {
+      nextBtn.addClass('disabled');
+    }
+    const monthLabel = $('<span>').addClass('calendar-month-label').text(`${monthNames[month]} ${year}`);
+
+    navCell.append(prevBtn).append(monthLabel).append(nextBtn);
+    navRow.append(navCell);
+    calendar.append(navRow);
+
     const headerRow = $('<tr>');
     const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -76,7 +103,10 @@ $(document).ready(function () {
           cell.append(cellPuzzle);
 
           // if we're not in the future, it's possible we have a buddy
-          if (date <= today) {
+          const isFutureDate = (year > currentYear) ||
+                               (year === currentYear && month > currentMonth) ||
+                               (year === currentYear && month === currentMonth && date > today);
+          if (!isFutureDate) {
             const currentDay = new Date(year, month, date);
             const currentDayFormatted = getFormattedDate(currentDay);
             const jsonFile = `${currentDayFormatted}.json`;
@@ -111,10 +141,52 @@ $(document).ready(function () {
   }
 
   const now = new Date();
-  const currentMonth = now.getMonth();
-  const currentYear = now.getFullYear();
+  let displayMonth = now.getMonth();
+  let displayYear = now.getFullYear();
 
-  $('.calendar-container').append(generateCalendar(currentMonth, currentYear));
+  function renderCalendar() {
+    const nowMonth = now.getMonth();
+    const nowYear = now.getFullYear();
+
+    // Calculate one month back
+    let prevMonth = nowMonth - 1;
+    let prevYear = nowYear;
+    if (prevMonth < 0) {
+      prevMonth = 11;
+      prevYear--;
+    }
+
+    // Can go back if we're currently viewing the current month
+    const canGoBack = (displayMonth === nowMonth && displayYear === nowYear);
+
+    $('.calendar-container').empty();
+    $('.calendar-container').append(generateCalendar(displayMonth, displayYear, canGoBack));
+
+    // Attach navigation handlers
+    $('.calendar-prev').off('click').on('click', function() {
+      if (!$(this).hasClass('disabled')) {
+        displayMonth--;
+        if (displayMonth < 0) {
+          displayMonth = 11;
+          displayYear--;
+        }
+        renderCalendar();
+      }
+    });
+
+    $('.calendar-next').off('click').on('click', function() {
+      if (!$(this).hasClass('disabled')) {
+        displayMonth++;
+        if (displayMonth > 11) {
+          displayMonth = 0;
+          displayYear++;
+        }
+        renderCalendar();
+      }
+    });
+  }
+
+  renderCalendar();
 
   const urlParams = new URLSearchParams(window.location.search);
   const fileParam = urlParams.get('file');

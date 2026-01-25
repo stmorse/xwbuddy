@@ -1,0 +1,58 @@
+name: Cleanup Old Puzzles
+
+on:
+  schedule:
+    # Run daily at 5:00 AM UTC
+    - cron: '0 5 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Delete puzzles older than 3 months
+        run: |
+          # Calculate the cutoff date (3 months ago)
+          cutoff_date=$(date -d "3 months ago" +%Y-%m-%d)
+          echo "Deleting puzzle files older than $cutoff_date"
+
+          deleted_count=0
+
+          # Find and delete old puzzle JSON files
+          for file in assets/????-??-??.json; do
+            if [ -f "$file" ]; then
+              # Extract date from filename
+              filename=$(basename "$file" .json)
+
+              # Compare dates (lexicographic comparison works for YYYY-MM-DD format)
+              if [[ "$filename" < "$cutoff_date" ]]; then
+                echo "Deleting $file"
+                rm "$file"
+                deleted_count=$((deleted_count + 1))
+              fi
+            fi
+          done
+
+          echo "Deleted $deleted_count puzzle file(s)"
+          echo "deleted_count=$deleted_count" >> $GITHUB_OUTPUT
+        id: cleanup
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Check if there are changes to commit
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "No old puzzles to remove"
+          else
+            git add -A
+            git commit -m "chore: remove puzzles older than 3 months"
+            git push
+          fi
