@@ -1,4 +1,4 @@
-# crossword buddy
+# Crossword Buddy
 
 This is the public code repository for the **Crossword Buddy** app currently live here:
 
