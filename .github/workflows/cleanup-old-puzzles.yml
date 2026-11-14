@@ -3,7 +3,7 @@ name: Cleanup Old Puzzles
 on:
   schedule:
     # Run daily at 5:00 AM UTC
-    - cron: '0 5 * * *'
+    #- cron: '0 5 * * *'
   workflow_dispatch: # Allow manual trigger
 
 jobs:
